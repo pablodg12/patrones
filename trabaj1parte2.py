@@ -6,6 +6,8 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
 import sklearn as sc
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def generate_data(dataname,n,noise):
@@ -35,7 +37,7 @@ def generate_data(dataname,n,noise):
     if dataname == "helix":
         X = np.zeros((n,3))
         t = (np.arange(1,n+1)*2*np.pi/n)
-        X[:,0] = (2+np.cos(8+t))*np.cos(t)+noise*np.random.normal(0,1,n)
+        X[:,0] = (2+np.cos(8*t))*np.cos(t)+noise*np.random.normal(0,1,n)
         X[:,1] = (2+np.cos(8*t))*np.sin(t)+noise*np.random.normal(0,1,n)
         X[:,2] = np.sin(8*t)+noise*np.random.normal(0,1,n)
         labels = t.astype('uint8')
@@ -158,8 +160,8 @@ def mean_label_imputation(dataset_label,dataset,missing,labels):
     return(b)
     
 
-dataset,labels1 = generate_data("swissRoll",3000,0.05)
-dataset1, missing = missing_value(0.1,dataset)
+dataset,labels1 = generate_data("helix",3000,0.05)
+dataset1, missing = missing_value(0.5,dataset)
 joined_dataset = np.c_[dataset1,labels1]
 joined_dataset = joined_dataset[np.argsort(joined_dataset[:,3])]
 zero_data = zero_imputation(missing,dataset)
@@ -177,6 +179,13 @@ print(np.linalg.norm(zero_data))
 print(np.linalg.norm(label_mean_data))
 print(np.linalg.norm(svd_data_label))
 
+fig = plt.figure()
+ax = fig.add_subplot(221, projection='3d')
+ax.set_xlim(-2, 2)
+ax.set_ylim(-2, 2)
+ax.set_zlim(-2, 2)
+ax.scatter(knn_data[:,0], knn_data[:,1], knn_data[:,2], c=labels1, s= 20)
+plt.show()
 
 
 

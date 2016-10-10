@@ -55,7 +55,7 @@ def generate_data(dataname,n,noise):
     if dataname == "helix":
         X = np.zeros((n,3))
         t = (np.arange(1,n+1)*2*np.pi/n)
-        X[:,0] = (2+np.cos(8+t))*np.cos(t)+noise*np.random.normal(0,1,n)
+        X[:,0] = (2+np.cos(8*t))*np.cos(t)+noise*np.random.normal(0,1,n)
         X[:,1] = (2+np.cos(8*t))*np.sin(t)+noise*np.random.normal(0,1,n)
         X[:,2] = np.sin(8*t)+noise*np.random.normal(0,1,n)
         labels = t.astype('uint8')
